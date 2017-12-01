@@ -115,16 +115,7 @@ print('NN_timings','-dpng','-r0');
 % figure('position', [0 0 800 800]);
 % plotconfusion(guesses(:, 1), l_test')
 
-% Confusion Matrix with labels and the predictions
+%% Confusion Matrix with labels and the predictions
 guesses = all_guesses(:, :, 156);
-figure('position', [0 0 800 800]);
-confuse_mat = confusionmat(guesses(:, 2), l_test');
-imagesc(confuse_mat);
-colorbar;
-title('NN PCA with 156 Bases', 'interpreter', 'latex');
-xlabel('Predicted Class');
-ylabel('Actual Class');
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('NN_confusemat','-dpng','-r0');
+plot_confusion(l_test, guesses(:,2)', 'NN PCA with 156 Bases', 'NN_confusemat');
 
