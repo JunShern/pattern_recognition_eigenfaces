@@ -1,17 +1,7 @@
-clear;
-filename = 'face.mat';
-
-% Use raw image
-[training_data, test_data] = generate_partitioned(filename);
-load partitioned_data;
-% Use PCA data
-%load atapca.mat;
-%training_data = faces_training;
-%test_data = faces_test;
-
+function [error] = svm_one_to_one(l_train, l_test, training_data, test_data, kernel_parameters)
 % Prepare data
 train_concat = vertcat(l_train,training_data);
-test_concat = vertcat(l_test,test_data);
+% test_concat = vertcat(l_test,test_data);
 
 numClasses = size(unique(horzcat(l_train,l_test)), 2);
 allPairs = combnk(unique(horzcat(l_train,l_test)), 2);
@@ -26,7 +16,7 @@ for n=1:size(allPairs,1)
     data_sel_train = train_concat_sel(2:end,:);
 
     % Train
-    svm_struct_train = svmtrain(labels_sel_train', data_sel_train', '-t 0');
+    svm_struct_train = svmtrain(labels_sel_train', data_sel_train', kernel_parameters);
 
     % Test
     [predicted_labels_sel] = svmpredict(l_test', test_data', svm_struct_train);
@@ -43,3 +33,5 @@ error = sum((l_test ~= predicted_labels'))/size(l_test,2);
 conMat = confusionmat(l_test,predicted_labels');
 imagesc(conMat);
 colorbar;
+
+end

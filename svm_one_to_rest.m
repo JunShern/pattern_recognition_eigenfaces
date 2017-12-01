@@ -1,9 +1,4 @@
-clear;
-
-filename = 'face.mat';
-[training_data, test_data] = generate_partitioned(filename);
-load partitioned_data;
-% load pca.mat;
+function [error] = svm_one_to_rest(l_train, l_test, training_data, test_data, kernel_parameters)
 
 numClasses = size(unique(horzcat(l_train,l_test)), 2);
 
@@ -16,7 +11,7 @@ for n=1:numClasses
     binary_labels_test(l_test~=n) = -1;
 
     % Train
-    svm_struct_train = svmtrain(binary_labels_train', training_data', '-t 0 -b 1');
+    svm_struct_train = svmtrain(binary_labels_train', training_data', kernel_parameters);
 
     % Test
     [predicted_labels_binary, accuracy, dec_val] = svmpredict(binary_labels_test', test_data', svm_struct_train, '-b 1');
@@ -32,3 +27,5 @@ error = sum((l_test ~= predicted_labels'))/size(l_test,2);
 conMat = confusionmat(l_test,predicted_labels');
 imagesc(conMat);
 colorbar;
+
+end
