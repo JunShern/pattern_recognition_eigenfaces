@@ -2,7 +2,8 @@ clear;
 
 % Use raw image
 split = 9;
-[training_data, test_data, l_train, l_test] = generate_partitioned_with_labels(9);
+%[training_data, test_data, l_train, l_test] = generate_partitioned_with_labels(9);
+load pca.mat;
 
 % Scaled data
 N = size(training_data,2);

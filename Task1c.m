@@ -3,7 +3,7 @@
 clear;
 
 % Load the necessary variables from the previous tasks
-load partitioned_data;
+%load partitioned_data;
 load pca.mat;
 load atapca.mat;
 
@@ -88,8 +88,8 @@ xlabel('Number of Bases');
 ylabel('Percentage');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 30);
-set(findall(gcf,'type','text'),'fontSize', 30);
+set(findall(gcf,'type','axes'),'fontsize', 26);
+set(findall(gcf,'type','text'),'fontSize', 26);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
@@ -103,8 +103,8 @@ xlabel('Number of Bases');
 ylabel('Time');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 18);
-set(findall(gcf,'type','text'),'fontSize', 18);
+set(findall(gcf,'type','axes'),'fontsize', 26);
+set(findall(gcf,'type','text'),'fontSize', 26);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';

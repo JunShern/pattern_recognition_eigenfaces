@@ -75,9 +75,9 @@ ylabel('Error');
 grid;
 leg = legend('Training Error', 'Test Error', 'Theorectical Error','Location','northeast');
 % Format data, need to make letters big to see well in Latex
-set(leg,'FontSize', 14);
-set(findall(gcf,'type','axes'),'fontsize', 18);
-set(findall(gcf,'type','text'),'fontSize', 18);
+set(leg,'FontSize', 12);
+set(findall(gcf,'type','axes'),'fontsize', 12);
+set(findall(gcf,'type','text'),'fontSize', 12);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';

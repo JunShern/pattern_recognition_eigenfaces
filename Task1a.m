@@ -2,9 +2,10 @@ clear;
 
 % Load the face.mat file
 filename = 'face.mat';
-[training_data, test_data] = generate_partitioned(filename);
+load pca.mat;
+[training_data, test_data, l_train, l_test] = generate_partitioned(filename);
 disp(['Training length is ' num2str(size(training_data, 2)) ...
-      '; Test length is ' num2str(size(test_data, 2)) '.']);
+       '; Test length is ' num2str(size(test_data, 2)) '.']);
 
 % First need to find the average face
 N = size(training_data,2);
@@ -44,7 +45,7 @@ disp(['Number of nonzero elements in ATA is ' num2str(nonzero2)]);
 % Save the variables into a file called pca.mat so that they are more
 % easily accesible in other MATLAB scripts
 
-save('pca.mat','training_data','test_data', 'A', 'B', 'average_face', ...
+save('pca.mat','training_data','test_data','l_train','l_test', 'A', 'B', 'average_face', ...
     'eigval', 'eigvec', 'eigval2', 'eigvec2', 'S', 'S2');
 
 %------------Timings for each method for discussion in report-----------
@@ -60,14 +61,14 @@ close all;
 % Plot for AAT eigenvalues
 AAT_eigval = sum(eigval, 2);
 figure('position', [0 0 1280 800]);
-plot(1:length(AAT_eigval), abs(AAT_eigval), 'linewidth', 5);
+plot(1:length(AAT_eigval), abs(AAT_eigval), 'linewidth', 3);
 title('Eigenvalues of $$S = AA^T$$', 'interpreter', 'latex');
 xlabel('Number of evals');
 ylabel('Value');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 40);
-set(findall(gcf,'type','text'),'fontSize', 40);
+set(findall(gcf,'type','axes'),'fontsize', 26);
+set(findall(gcf,'type','text'),'fontSize', 26);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
@@ -76,14 +77,14 @@ print('AAT_eigvals','-dpng','-r0');
 % Plot for ATA eigenvalues
 ATA_eigval2 = sum(eigval2, 2);
 figure('position', [0 0 1280 800]);
-plot(1:length(ATA_eigval2), abs(ATA_eigval2), 'linewidth', 5);
+plot(1:length(ATA_eigval2), abs(ATA_eigval2), 'linewidth', 3);
 title('Eigenvalues of $$S = A^TA$$', 'interpreter', 'latex');
 xlabel('Number of evals');
 ylabel('Value');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 40);
-set(findall(gcf,'type','text'),'fontSize', 40);
+set(findall(gcf,'type','axes'),'fontsize', 26);
+set(findall(gcf,'type','text'),'fontSize', 26);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';

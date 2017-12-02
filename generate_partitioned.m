@@ -1,11 +1,11 @@
-function [training_data, test_data] = generate_partitioned(~) 
+function [training_data, test_data, l_train, l_test] = generate_partitioned(~) 
 % generate_partitioned Separates data into 70% training_data and 30%
 % test_data
 
 load face.mat;
 
 N = size(X,2);
-data = vertcat(1:N, X);         % Labelling the original positions, in case want to do random partiioning of data
+data = vertcat(1:N, X);         % Labelling the original positions, in case want to do random partioning of data
 data = data(:, randperm(N));    % Random permutation of the integers, just the columns
 
 % Partition data
@@ -21,8 +21,6 @@ test_data = test_data(2:end, :);
 % Always select labels using indices from file
 l_train = l(training_indices);
 l_test = l(test_indices);
-
-save('partitioned_data', 'l_train', 'l_test');
 
 end
 
