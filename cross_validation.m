@@ -31,7 +31,7 @@ pca_test_scaled_1toR =  pca_scaled_1toR(:, N_pca+1:size(pca_scaled_1toR,2));
 
 %% Cross validation - LINEAR KERNEL
 
-C = 2.^linspace(-20,10,11);
+C = 2.^linspace(-20,5,21);
 % K-fold cross-validation 
 K = 10;
 indices = crossvalind('Kfold',l_train,K);
@@ -75,15 +75,27 @@ save('crossval_linear.mat','err_linear_1v1_scaled_array','err_linear_1vR_scaled_
 
 %% Plot results
 load('crossval_linear.mat');
+C = 2.^linspace(-20,5,21);
+figure
 plot(log(C), err_linear_1v1_scaled_array)
+title('Cross Validation Error against C for 1v1')
+xlabel('log2(C)')
+ylabel('cross-validation error')
+saveas(gcf,'crossValErr_linear_1v1.png')
+
+figure
 plot(log(C), err_linear_1vR_scaled_array)
+title('Cross Validation Error against C for 1vR')
+xlabel('log2(C)')
+ylabel('cross-validation error')
+saveas(gcf,'crossValErr_linear_1vR.png')
 
 %% Cross validation - RBF KERNEL
 
 C = ones(1, 11); %2.^linspace(-20,10,11);
-gamma = 2.^linspace(-30,10,11);
+gamma = 2.^linspace(-50,20,11);
 % K-fold cross-validation 
-K = 10;
+K = 5;
 indices = crossvalind('Kfold',l_train,K);
 
 err_rbf_1v1_scaled_array = zeros(size(gamma,2),size(C,2));
@@ -123,6 +135,6 @@ end
 save('crossval_rbf.mat','err_rbf_1v1_scaled_array','err_rbf_1vR_scaled_array');
 
 %% Plot results
-load('crossval_linear.mat');
+load('crossval_rbf.mat');
 heatmap(log(C), log(gamma), err_rbf_1v1_scaled_array)
 heatmap(log(C), log(gamma), err_rbf_1vR_scaled_array)
