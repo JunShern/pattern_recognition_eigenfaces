@@ -87,11 +87,11 @@ print('Error_vs_Bases_Graph','-dpng','-r0');
 % M is the number of eigenvalues/vector to use
 %----------------- M = 10 -----------------
 M = 10;
-eigvec2_sel = eigvec2_adj(:, 1:M);
+eigvec2_sel = eigvec2_adj(1:M,:);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(:, 1:M);
-faces_test_sel = faces_test(:, 1:M);
+faces_training_sel = faces_training(1:M,:);
+faces_test_sel = faces_test(1:M,:);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
@@ -138,11 +138,11 @@ print('reface3','-dpng','-r0');
 
 %----------------- M = 25 -----------------
 M = 75;
-eigvec2_sel = eigvec2_adj(:, 1:M);
+eigvec2_sel = eigvec2_adj(1:M,:);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(:, 1:M);
-faces_test_sel = faces_test(:, 1:M);
+faces_training_sel = faces_training(1:M,:);
+faces_test_sel = faces_test(1:M,:);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
@@ -169,11 +169,11 @@ print('reface32','-dpng','-r0');
 
 %----------------- M = 50 -----------------
 M = 150;
-eigvec2_sel = eigvec2_adj(:, 1:M);
+eigvec2_sel = eigvec2_adj(1:M,:);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(:, 1:M);
-faces_test_sel = faces_test(:, 1:M);
+faces_training_sel = faces_training(1:M,:);
+faces_test_sel = faces_test(1:M,:);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';

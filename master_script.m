@@ -2,8 +2,8 @@ clear;
 
 % Use raw image
 split = 9;
-%[training_data, test_data, l_train, l_test] = generate_partitioned_with_labels(9);
-load pca.mat;
+[training_data, test_data, l_train, l_test] = generate_partitioned_by_class(split);
+%load pca.mat;
 
 % Scaled data
 N = size(training_data,2);
@@ -11,15 +11,17 @@ raw_concat = horzcat(training_data, test_data);
 raw_scaled = zscore(raw_concat, 0, 2);
 training_scaled = raw_scaled(:, 1:N);
 test_scaled = raw_scaled(:, N+1:size(raw_scaled,2));
-
+%%
 % PCA data
+M = 10;
 % load atapca.mat;
-[pca_training_data, pca_test_data] = get_pca(training_data, test_data);
+[pca_training_data, pca_test_data] = get_pca(training_data, test_data, M);
+
 % pca_training_data = faces_training';
 % pca_test_data = faces_test';
 
 % Scaled PCA data
-N_pca = size(training_data,2);
+N_pca = size(pca_training_data,2);
 pca_concat = horzcat(pca_training_data, pca_test_data);
 pca_scaled_1to1 = zscore(pca_concat, 0, 2);
 pca_training_scaled_1to1 = pca_scaled_1to1(:, 1:N_pca);
@@ -30,36 +32,39 @@ pca_training_scaled_1toR = pca_scaled_1toR(:, 1:N_pca);
 pca_test_scaled_1toR =  pca_scaled_1toR(:, N_pca+1:size(pca_scaled_1toR,2));
 
 %% ONE-TO-ONE
-kernel_parameters = '-t 0';
+kernel_parameters = sprintf('-t 0');
 
 % Basic
-[err_1v1_unscaled, err_1v1_unscaled_train_time, err_1v1_unscaled_test_time]  = svm_one_to_one(l_train, l_test, training_data, test_data, kernel_parameters, 'Raw Data Unscaled Confusion Matrix (1v1)', 'confmat_err_1v1_unscaled');
+[err_1v1_unscaled, train_time_1v1_unscaled, test_time_err_1v1_unscaled, ~, ~]  = svm_one_to_one(l_train, l_test, training_data, test_data, kernel_parameters, 'Raw Data Unscaled Confusion Matrix (1v1)', 'confmat_err_1v1_unscaled');
 
 % Scaled
-[err_1v1_scaled, err_1v1_scaled_train_time, err_1v1_scaled_test_time] = svm_one_to_one(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_scaled');
+[err_1v1_scaled, train_time_1v1_scaled, test_time_err_1v1_scaled, ~, ~] = svm_one_to_one(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_scaled');
 
 % PCA unscaled
-[err_1v1_pca_unscaled, err_1v1_pca_unscaled_train_time, err_1v1_pca_unscaled_test_time] = svm_one_to_one(l_train, l_test, pca_training_data, pca_test_data, kernel_parameters, 'PCA Data Unscaled Confusion Matrix (1v1)', 'confmat_err_1v1_pca_unscaled');
+[err_1v1_pca_unscaled, train_time_err_1v1_pca_unscaled, test_time_err_1v1_pca_unscaled, ~, ~] = svm_one_to_one(l_train, l_test, pca_training_data, pca_test_data, kernel_parameters, 'PCA Data Unscaled Confusion Matrix (1v1)', 'confmat_err_1v1_pca_unscaled');
 
 % PCA scaled
-[err_1v1_pca_scaled, err_1v1_pca_scaled_train_time, err_1v1_pca_scaled_test_time] = svm_one_to_one(l_train, l_test, pca_training_scaled_1to1, pca_test_scaled_1to1, kernel_parameters, 'PCA Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_pca_scaled');
+[err_1v1_pca_scaled, train_time_err_1v1_pca_scaled, test_time_err_1v1_pca_scaled, ~, ~] = svm_one_to_one(l_train, l_test, pca_training_scaled_1to1, pca_test_scaled_1to1, kernel_parameters, 'PCA Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_pca_scaled');
 
 %% ONE-TO-REST
 
 %kernel_parameters = sprintf('-t 0 -b 1 -c %i -g %i', cost, gamma);
 kernel_parameters = sprintf('-t 0 -b 1');
 
-[err_1vR_unscaled, err_1vR_unscaled_train_time, err_1vR_unscaled_test_time] = svm_one_to_rest(l_train, l_test, training_data, test_data, kernel_parameters, 'Raw Data Unscaled Confusion Matrix (1vR)', 'confmat_err_1vR_unscaled');
+[err_1vR_unscaled, train_time_1vR_unscaled, test_time_1vR_unscaled, ~, ~] = svm_one_to_rest(l_train, l_test, training_data, test_data, kernel_parameters, 'Raw Data Unscaled Confusion Matrix (1vR)', 'confmat_err_1vR_unscaled');
 
-[err_1vR_scaled, err_1vR_scaled_train_time, err_1vR_scaled_test_time] = svm_one_to_rest(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1vR)', 'confmat_err_1vR_scaled');
+[err_1vR_scaled, train_time_1vR_scaled, test_time_1vR_scaled, ~, ~] = svm_one_to_rest(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1vR)', 'confmat_err_1vR_scaled');
 
-[err_1vR_pca_unscaled, err_1vR_pca_unscaled_train_time, err_1vR_pca_unscaled_test_time] = svm_one_to_rest(l_train, l_test, pca_training_data, pca_test_data, kernel_parameters, 'PCA Data Unscaled Confusion Matrix (1vR)', 'confmat_err_1vR_pca_unscaled');
+[err_1vR_pca_unscaled, train_time_1vR_pca_unscaled, test_time_1vR_pca_unscaled, ~, ~] = svm_one_to_rest(l_train, l_test, pca_training_data, pca_test_data, kernel_parameters, 'PCA Data Unscaled Confusion Matrix (1vR)', 'confmat_err_1vR_pca_unscaled');
 
-[err_1vR_pca_scaled, err_1vR_pca_scaled_train_time, err_1vR_pca_scaled_test_time] = svm_one_to_rest(l_train, l_test, pca_training_scaled_1toR, pca_test_scaled_1toR, kernel_parameters, 'PCA Data Scaled Confusion Matrix (1vR)', 'confmat_err_1vR_pca_scaled');
+[err_1vR_pca_scaled, train_time_1vR_pca_scaled, test_time_1vR_pca_scaled, ~, ~] = svm_one_to_rest(l_train, l_test, pca_training_scaled_1toR, pca_test_scaled_1toR, kernel_parameters, 'PCA Data Scaled Confusion Matrix (1vR)', 'confmat_err_1vR_pca_scaled');
 
 
-%% 
-[err_1v1_scaled, err_1v1_scaled_train_time, err_1v1_scaled_test_time, svm_struct_arr, predicted_labels] = svm_one_to_one(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_scaled');
+%% Plotting support vectors for correct and wrong prediction cases
+
+kernel_parameters = '-t 0';
+
+[err_1v1_scaled, train_time_1v1_scaled, test_time_1v1_scaled, svm_struct_arr, predicted_labels] = svm_one_to_one(l_train, l_test, training_scaled, test_scaled, kernel_parameters, 'Raw Data Scaled Confusion Matrix (1v1)', 'confmat_err_1v1_scaled');
 guesses = [l_test == predicted_labels'; l_test; predicted_labels'];
 % Correct
 [r, c, v] = find(guesses(1,:)==1);

@@ -1,9 +1,7 @@
 clear;
-
-% Load the face.mat file
-filename = 'face.mat';
-load pca.mat;
-[training_data, test_data, l_train, l_test] = generate_partitioned(filename);
+%load pca.mat;
+split = 9;
+[training_data, test_data, l_train, l_test] = generate_partitioned_by_class(split);
 disp(['Training length is ' num2str(size(training_data, 2)) ...
        '; Test length is ' num2str(size(test_data, 2)) '.']);
 

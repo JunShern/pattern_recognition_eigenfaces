@@ -38,9 +38,6 @@ predicted_labels = mode(votes, 2);
 error = sum((l_test ~= predicted_labels'))/size(l_test,2);
 
 % Plot confusion matrix
-%conMat = confusionmat(l_test,predicted_labels');
-%imagesc(conMat);
-%colorbar;
-% plot_confusion(l_test, predicted_labels', conmat_title, conmat_filename);
+plot_confusion(l_test, predicted_labels', conmat_title, conmat_filename);
 
 end

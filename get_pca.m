@@ -1,4 +1,4 @@
-function [faces_training, faces_test] = get_pca(training_data, test_data)
+function [faces_training, faces_test] = get_pca(training_data, test_data, M)
 
 % First need to find the average face
 N = size(training_data,2);
@@ -39,5 +39,9 @@ eigvec2_adj = normc(eigvec2_adj);       % Normalize colums of matrix
 % Each face will be represented by each row
 faces_training = (A' * eigvec2_adj)';      % w_n = [a_n1, a_n2,...,a_nM]'
 faces_test = (B' * eigvec2_adj)';
+
+%% Choose M best
+faces_training = faces_training(1:M,:);
+faces_test= faces_test(1:M,:);
 
 end

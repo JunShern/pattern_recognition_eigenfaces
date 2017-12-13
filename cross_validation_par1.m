@@ -1,7 +1,7 @@
 % Use raw image
 split = 9;
-[training_data, test_data, l_train, l_test] = generate_partitioned_by_class(split);
-save('crossval_dataset.mat','training_data','test_data','l_train','l_test');
+%[training_data, test_data, l_train, l_test] = generate_partitioned_by_class(split);
+%save('crossval_dataset.mat','training_data','test_data','l_train','l_test');
 
 clear;
 
@@ -14,6 +14,23 @@ raw_concat = horzcat(training_data, test_data);
 raw_scaled = zscore(raw_concat, 0, 2);
 training_scaled = raw_scaled(:, 1:N);
 test_scaled = raw_scaled(:, N+1:size(raw_scaled,2));
+
+% PCA data
+% load atapca.mat;
+[pca_training_data, pca_test_data] = get_pca(training_data, test_data);
+% pca_training_data = faces_training';
+% pca_test_data = faces_test';
+
+% Scaled PCA data
+N_pca = size(training_data,2);
+pca_concat = horzcat(pca_training_data, pca_test_data);
+pca_scaled_1to1 = zscore(pca_concat, 0, 2);
+pca_training_scaled_1to1 = pca_scaled_1to1(:, 1:N_pca);
+pca_test_scaled_1to1 = pca_scaled_1to1(:, N_pca+1:size(pca_scaled_1to1,2));
+
+pca_scaled_1toR = zscore(pca_concat, 0, 1);
+pca_training_scaled_1toR = pca_scaled_1toR(:, 1:N_pca);
+pca_test_scaled_1toR =  pca_scaled_1toR(:, N_pca+1:size(pca_scaled_1toR,2));
 
 %% Cross validation - LINEAR KERNEL
 
@@ -62,34 +79,27 @@ save('crossval_linear.mat','err_linear_1v1_scaled_array','err_linear_1vR_scaled_
 %% Plot results
 load('crossval_linear.mat');
 C = 2.^linspace(-20,5,21);
-
-figure('position', [0 0 1280 800]);
-plot(split_arr/10, errors, 'linewidth', 3)
+figure
 plot(log(C), err_linear_1v1_scaled_array)
 title('Cross Validation Error against C for 1v1')
 xlabel('log2(C)')
 ylabel('cross-validation error')
-set(findall(gcf,'type','axes'),'fontsize', 32);
-set(findall(gcf,'type','text'),'fontSize',32);
 saveas(gcf,'crossValErr_linear_1v1.png')
 
-figure('position', [0 0 1280 800]);
-plot(split_arr/10, errors, 'linewidth', 3)
+figure
 plot(log(C), err_linear_1vR_scaled_array)
 title('Cross Validation Error against C for 1vR')
 xlabel('log2(C)')
 ylabel('cross-validation error')
-set(findall(gcf,'type','axes'),'fontsize', 32);
-set(findall(gcf,'type','text'),'fontSize',32);
 saveas(gcf,'crossValErr_linear_1vR.png')
 
 %% Cross validation - RBF KERNEL
 
-C = 2.^linspace(-10,20,10);
-gamma = 2.^linspace(-20,10,10);
+C = 2.^linspace(-10,20,8);
+gamma = 2.^linspace(-20,10,8);
 
 % Parallel computation
-%C = C(:,1:4);
+C = C(:,1:4);
 %C = C(:,5:end);
 %save('crossval_dataset.mat','training_data','test_data','l_train','l_test','C','gamma');
 
@@ -132,7 +142,7 @@ for i=1:size(gamma,2) % Param search loops
     end
 end
 
-save('crossval_rbf_final.mat','err_rbf_1v1_scaled_array','err_rbf_1vR_scaled_array','C','gamma');
+save('crossval_rbf1.mat','err_rbf_1v1_scaled_array','err_rbf_1vR_scaled_array','C','gamma');
 
 %% Plot results
 load('crossval_rbf.mat');
@@ -140,11 +150,7 @@ load('crossval_rbf.mat');
 
 %heatmap(log(C), log(gamma), err_rbf_1v1_scaled_array)
 %heatmap(log(C), log(gamma), err_rbf_1vR_scaled_array)
-imagesc(err_rbf_1v1_scaled_array);
+
+imagesc(errs);
 h = colorbar;
 ylabel(h, 'Error');
-
-imagesc(err_rbf_1vR_scaled_array);
-h = colorbar;
-ylabel(h, 'Error');
-
