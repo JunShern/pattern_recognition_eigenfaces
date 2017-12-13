@@ -98,6 +98,8 @@ saveas(gcf,'crossValErr_linear_1vR.png')
 C = 2.^linspace(-10,10,8);
 gamma = 2.^linspace(-10,10,8);
 
+% Parallel computation
+%C = C(:,1:2);
 %save('crossval_dataset.mat','training_data','test_data','l_train','l_test','C','gamma');
 
 % K-fold cross-validation 
