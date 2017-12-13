@@ -100,6 +100,9 @@ gamma = 2.^linspace(-10,10,8);
 
 % Parallel computation
 %C = C(:,1:2);
+%C = C(:,3:4);
+%C = C(:,5:6);
+%C = C(:,7:end);
 %save('crossval_dataset.mat','training_data','test_data','l_train','l_test','C','gamma');
 
 % K-fold cross-validation 
