@@ -2,8 +2,8 @@ clear;
 
 % Use raw image
 split = 9;
-%[training_data, test_data, l_train, l_test] = generate_partitioned_with_labels(split);
-load pca.mat;
+[training_data, test_data, l_train, l_test] = generate_partitioned_with_labels(split);
+%load pca.mat;
 
 % Scaled data
 N = size(training_data,2);
@@ -14,20 +14,20 @@ test_scaled = raw_scaled(:, N+1:size(raw_scaled,2));
 
 % PCA data
 % load atapca.mat;
-[pca_training_data, pca_test_data] = get_pca(training_data, test_data);
+% [pca_training_data, pca_test_data] = get_pca(training_data, test_data);
 % pca_training_data = faces_training';
 % pca_test_data = faces_test';
 
 % Scaled PCA data
-N_pca = size(training_data,2);
-pca_concat = horzcat(pca_training_data, pca_test_data);
-pca_scaled_1to1 = zscore(pca_concat, 0, 2);
-pca_training_scaled_1to1 = pca_scaled_1to1(:, 1:N_pca);
-pca_test_scaled_1to1 = pca_scaled_1to1(:, N_pca+1:size(pca_scaled_1to1,2));
-
-pca_scaled_1toR = zscore(pca_concat, 0, 1);
-pca_training_scaled_1toR = pca_scaled_1toR(:, 1:N_pca);
-pca_test_scaled_1toR =  pca_scaled_1toR(:, N_pca+1:size(pca_scaled_1toR,2));
+% N_pca = size(training_data,2);
+% pca_concat = horzcat(pca_training_data, pca_test_data);
+% pca_scaled_1to1 = zscore(pca_concat, 0, 2);
+% pca_training_scaled_1to1 = pca_scaled_1to1(:, 1:N_pca);
+% pca_test_scaled_1to1 = pca_scaled_1to1(:, N_pca+1:size(pca_scaled_1to1,2));
+% 
+% pca_scaled_1toR = zscore(pca_concat, 0, 1);
+% pca_training_scaled_1toR = pca_scaled_1toR(:, 1:N_pca);
+% pca_test_scaled_1toR =  pca_scaled_1toR(:, N_pca+1:size(pca_scaled_1toR,2));
 
 %% Cross validation - LINEAR KERNEL
 
@@ -92,17 +92,17 @@ saveas(gcf,'crossValErr_linear_1vR.png')
 
 %% Cross validation - RBF KERNEL
 
-C = ones(1, 11); %2.^linspace(-20,10,11);
-gamma = 2.^linspace(-50,20,11);
+C = 2.^linspace(-10,10,8);
+gamma = 2.^linspace(-10,10,8);
 % K-fold cross-validation 
-K = 5;
+K = 10;
 indices = crossvalind('Kfold',l_train,K);
 
 err_rbf_1v1_scaled_array = zeros(size(gamma,2),size(C,2));
 err_rbf_1vR_scaled_array = zeros(size(gamma,2),size(C,2));
 
 for i=1:size(gamma,2) % Param search loops
-    j=1; %for j=1:size(C,2) 
+    for j=1:size(C,2) 
         
         acc_cross_val_err_1v1 = 0; % Accumulate errors
         acc_cross_val_err_1vR = 0; % Accumulate errors
@@ -129,12 +129,12 @@ for i=1:size(gamma,2) % Param search loops
         % Print status
         err_rbf_1v1_scaled_array
         err_rbf_1vR_scaled_array
-    %end
+    end
 end
 
 save('crossval_rbf.mat','err_rbf_1v1_scaled_array','err_rbf_1vR_scaled_array');
 
 %% Plot results
 load('crossval_rbf.mat');
-heatmap(log(C), log(gamma), err_rbf_1v1_scaled_array)
-heatmap(log(C), log(gamma), err_rbf_1vR_scaled_array)
+% heatmap(log(C), log(gamma), err_rbf_1v1_scaled_array)
+% heatmap(log(C), log(gamma), err_rbf_1vR_scaled_array)

@@ -1,4 +1,4 @@
-function [error, train_time, test_time] = svm_one_to_rest(l_train, l_test, training_data, test_data, kernel_parameters, conmat_title, conmat_filename)
+function [error, train_time, test_time, svm_struct_train, predicted_labels] = svm_one_to_rest(l_train, l_test, training_data, test_data, kernel_parameters, conmat_title, conmat_filename)
 
 numClasses = size(unique(horzcat(l_train,l_test)), 2);
 
@@ -34,6 +34,6 @@ error = sum((l_test ~= predicted_labels'))/size(l_test,2);
 %conMat = confusionmat(l_test,predicted_labels');
 %imagesc(conMat);
 %colorbar;
-plot_confusion(l_test, predicted_labels', conmat_title, conmat_filename);
+% plot_confusion(l_test, predicted_labels', conmat_title, conmat_filename);
 
 end
