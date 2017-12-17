@@ -52,7 +52,7 @@ end
 save('atapca.mat','eigval2','eigvec2_adj', 'faces_training', ...
     'faces_test', 'avgtraining_error', 'avgtest_error');
 
-%------------------------Plotting for the Report-----------------------
+%% ------------------------Plotting for the Report-----------------------
 
 ATA_eigval2 = abs(sum(eigval2, 2));
 eig_size = size(ATA_eigval2, 1);
@@ -65,9 +65,9 @@ end
 % Plotting the different errors in the question
 figure
 hold on;
-plot(avgtraining_error, 'LineWidth', 3);
-plot(avgtest_error, 'LineWidth', 3);
-plot(sqrt(eigs_unused), 'LineWidth', 3);
+plot(avgtraining_error/2576, 'LineWidth', 3);
+plot(avgtest_error/2576, 'LineWidth', 3);
+plot(sqrt(eigs_unused)/2576, 'LineWidth', 3);
 hold off;
 title('Average Reconstruction Error vs. Number of Bases', 'interpreter', 'latex');
 xlabel('Number of Bases');
@@ -85,13 +85,13 @@ print('Error_vs_Bases_Graph','-dpng','-r0');
 
 % Need to plot to reconstruct image
 % M is the number of eigenvalues/vector to use
-%----------------- M = 10 -----------------
+%% ----------------- M = 10 -----------------
 M = 10;
-eigvec2_sel = eigvec2_adj(1:M,:);
+eigvec2_sel = eigvec2_adj(:, 1:M);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(1:M,:);
-faces_test_sel = faces_test(1:M,:);
+faces_training_sel = faces_training(:, 1:M);
+faces_test_sel = faces_test(:, 1:M);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
@@ -136,13 +136,13 @@ fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('reface3','-dpng','-r0');
 
-%----------------- M = 25 -----------------
+%----------------- M = 75 -----------------
 M = 75;
-eigvec2_sel = eigvec2_adj(1:M,:);
+eigvec2_sel = eigvec2_adj(:, 1:M);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(1:M,:);
-faces_test_sel = faces_test(1:M,:);
+faces_training_sel = faces_training(:, 1:M);
+faces_test_sel = faces_test(:, 1:M);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
@@ -167,13 +167,13 @@ fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('reface32','-dpng','-r0');
 
-%----------------- M = 50 -----------------
+%----------------- M = 150 -----------------
 M = 150;
-eigvec2_sel = eigvec2_adj(1:M,:);
+eigvec2_sel = eigvec2_adj(:, 1:M);
 
 % Project each face onto each eigenvector, each row is a face
-faces_training_sel = faces_training(1:M,:);
-faces_test_sel = faces_test(1:M,:);
+faces_training_sel = faces_training(:, 1:M);
+faces_test_sel = faces_test(:, 1:M);
 
 % Reconstruct each face
 faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
@@ -197,3 +197,34 @@ show_face(reface3);
 fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('reface33','-dpng','-r0');
+
+%----------------- M = 300 -----------------
+M = 300;
+eigvec2_sel = eigvec2_adj(:, 1:M);
+
+% Project each face onto each eigenvector, each row is a face
+faces_training_sel = faces_training(:, 1:M);
+faces_test_sel = faces_test(:, 1:M);
+
+% Reconstruct each face
+faces_reconstructed_training = repmat(average_face, 1, N) + eigvec2_sel * faces_training_sel';
+faces_reconstructed_test = repmat(average_face, 1, P) + eigvec2_sel * faces_test_sel';
+
+reface1 = faces_reconstructed_training(:, 111);
+reface2 = faces_reconstructed_training(:, 222);
+reface3 = faces_reconstructed_test(:, 33);
+
+show_face(reface1);
+fig = gcf;
+fig.PaperPositionMode = 'auto';
+print('reface14','-dpng','-r0');
+
+show_face(reface2);
+fig = gcf;
+fig.PaperPositionMode = 'auto';
+print('reface24','-dpng','-r0');
+
+show_face(reface3);
+fig = gcf;
+fig.PaperPositionMode = 'auto';
+print('reface34','-dpng','-r0');

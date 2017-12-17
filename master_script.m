@@ -13,7 +13,7 @@ training_scaled = raw_scaled(:, 1:N);
 test_scaled = raw_scaled(:, N+1:size(raw_scaled,2));
 %%
 % PCA data
-M = 10;
+M = 468;
 % load atapca.mat;
 [pca_training_data, pca_test_data] = get_pca(training_data, test_data, M);
 

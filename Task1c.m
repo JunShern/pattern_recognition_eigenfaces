@@ -56,14 +56,13 @@ for M = 1:N
     failure(M) = incorrect;
 end
 
-%------------------------Plotting for the Report-----------------------
-
+%% ------------------------Plotting for the Report-----------------------
 
 % Success and Failure cases plot
 figure('position', [0 0 1280 800]);
 hold on;
-plot(success, 'LineWidth', 5);
-plot(failure, 'LineWidth', 5);
+plot(success, 'LineWidth', 4);
+plot(failure, 'LineWidth', 4);
 hold off;
 title('Success \& Failure Guesses vs. Number of Bases', 'interpreter', 'latex');
 xlabel('Number of Bases');
@@ -82,14 +81,14 @@ print('NN_success_failures','-dpng','-r0');
 % Recognition Accuracy plot
 figure('position', [0 0 1280 800]);
 percentage = 100 * (success ./ size(test_data, 2));
-plot(percentage, 'LineWidth', 5);
+plot(percentage, 'LineWidth', 4);
 title('Recognition Accuracy vs. Number of Bases', 'interpreter', 'latex');
 xlabel('Number of Bases');
-ylabel('Percentage');
+ylabel('Accuracy Percentage');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 26);
-set(findall(gcf,'type','text'),'fontSize', 26);
+set(findall(gcf,'type','axes'),'fontsize', 32);
+set(findall(gcf,'type','text'),'fontSize', 32);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
@@ -97,14 +96,14 @@ print('NN_Recognition_Accuracy','-dpng','-r0');
 
 % Timing plot
 figure('position', [0 0 1280 800]);
-plot(timings, 'LineWidth', 5);
+plot(timings, 'LineWidth', 4);
 title('Time Taken vs. Number of Bases', 'interpreter', 'latex');
 xlabel('Number of Bases');
-ylabel('Time');
+ylabel('Time (s)');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 26);
-set(findall(gcf,'type','text'),'fontSize', 26);
+set(findall(gcf,'type','axes'),'fontsize', 32);
+set(findall(gcf,'type','text'),'fontSize', 32);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
@@ -116,6 +115,19 @@ print('NN_timings','-dpng','-r0');
 % plotconfusion(guesses(:, 1), l_test')
 
 %% Confusion Matrix with labels and the predictions
-guesses = all_guesses(:, :, 156);
-plot_confusion(l_test, guesses(:,2)', 'NN PCA with 156 Bases', 'NN_confusemat');
 
+% for i = 10:70:length(training_data) 
+% guesses = all_guesses(:, :, i);
+% num_bases = num2str(i); 
+% title = strcat('NN PCA with  ',' ', num_bases, ' ', 'Bases');
+% filename = strcat('NN_confusemat', num_bases);
+% plot_confusion(l_test, guesses(:,2)', title, filename);
+% end
+
+% Plot Confusion Matrix for M = 10;
+guesses = all_guesses(:, :, 10);
+plot_confusion(l_test, guesses(:,2)', 'Confusion Matrix M = 10', 'NN_confusemat_10');
+
+% Plot Confusion Matrix for M = 468;
+guesses = all_guesses(:, :, 468);
+plot_confusion(l_test, guesses(:,2)', 'Confusion Matrix M = 468', 'NN_confusemat_468');

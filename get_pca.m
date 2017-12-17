@@ -1,3 +1,4 @@
+% function [faces_training, faces_test] = get_pca(training_data, test_data)
 function [faces_training, faces_test] = get_pca(training_data, test_data, M)
 
 % First need to find the average face

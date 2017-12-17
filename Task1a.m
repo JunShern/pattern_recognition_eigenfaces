@@ -52,7 +52,7 @@ ATA = @() eig((1/N) * A' * A);
 time_AAT = timeit(AAT, 2)
 time_ATA = timeit(ATA, 2)
 
-%--------------------Plotting for the Report--------------------
+%% --------------------Plotting for the Report--------------------
 
 close all;
 
@@ -61,12 +61,12 @@ AAT_eigval = sum(eigval, 2);
 figure('position', [0 0 1280 800]);
 plot(1:length(AAT_eigval), abs(AAT_eigval), 'linewidth', 3);
 title('Eigenvalues of $$S = AA^T$$', 'interpreter', 'latex');
-xlabel('Number of evals');
+xlabel('Number of eigenvalues');
 ylabel('Value');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 26);
-set(findall(gcf,'type','text'),'fontSize', 26);
+set(findall(gcf,'type','axes'),'fontsize', 32);
+set(findall(gcf,'type','text'),'fontSize', 32);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
@@ -77,19 +77,19 @@ ATA_eigval2 = sum(eigval2, 2);
 figure('position', [0 0 1280 800]);
 plot(1:length(ATA_eigval2), abs(ATA_eigval2), 'linewidth', 3);
 title('Eigenvalues of $$S = A^TA$$', 'interpreter', 'latex');
-xlabel('Number of evals');
+xlabel('Number of eigenvalues');
 ylabel('Value');
 grid;
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 26);
-set(findall(gcf,'type','text'),'fontSize', 26);
+set(findall(gcf,'type','axes'),'fontsize', 32);
+set(findall(gcf,'type','text'),'fontSize', 32);
 % Save
 fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('ATA_eigvals','-dpng','-r0');
 
 % Show and save 3 eigenfaces, S=AAT.
-for i = 1:3
+for i = 1:4
     show_face(eigvec(:, i));
     fig = gcf;
     fig.PaperPositionMode = 'auto';
@@ -104,7 +104,7 @@ eigvec2_adj = A * eigvec2;
 eigvec2_adj = normc(eigvec2_adj);       % Normalize colums of matrix
 
 % Show and save 4 eigenfaces, S=ATA.
-for i = 4:7
+for i = 4:8
     show_face(eigvec2_adj(:, i - 3));
     fig = gcf;
     fig.PaperPositionMode = 'auto';

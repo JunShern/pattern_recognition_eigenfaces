@@ -9,9 +9,8 @@ h = colorbar;
 title(title_text, 'interpreter', 'latex');
 xlabel('Predicted Class');
 ylabel('Actual Class');
-ylabel(h, 'Frequency of classifications');
 % Format data, need to make letters big to see well in Latex
-set(findall(gcf,'type','axes'),'fontsize', 18);
+set(findall(gcf,'type','axes'),'fontsize', 26);
 
 fig = gcf;
 fig.PaperPositionMode = 'auto';
